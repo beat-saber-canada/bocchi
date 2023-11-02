@@ -28,6 +28,7 @@
 
   let eMatches: Match[] = [];
   io.on("state", (state : State) => {
+    console.log(state)
     eMatches = state.matches;
   });
 
@@ -71,6 +72,7 @@
               >
               <td class="border px-4 py-2 text-center text-ellipsis">
                 {formatPlayers(match.players)}
+                {JSON.stringify(match)}
               </td>
               <td>
                 <button

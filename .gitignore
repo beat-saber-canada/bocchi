@@ -15,3 +15,4 @@ shared/tsconfig.tsbuildinfo
 .idea/
 .vscode/
 .history/
+db.sqlite

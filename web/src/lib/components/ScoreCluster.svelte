@@ -13,13 +13,14 @@
   let accText = spring(0);
   $: accText.set(accuracy);
 
-  io.on("realtimeScore", ({ team }: RTState) => {
-    if (team.guid === teamGUID) {
-      missCount = team.score.totalmisscount;
-      accuracy = Math.round(team.score.accuracy * 10000) / 100;
-      score = team.score.score;
-    }
-  });
+  // io.on("realtimeScore", ({ team }: RTState) => {
+  //   if (team.guid === teamGUID) {
+  //     missCount = team.score.totalmisscount;
+  //     accuracy = Math.round(team.score.accuracy * 10000) / 100;
+  //     score = team.score.score;
+  //   }
+  // });
+  
 </script>
 
 <div class="flex-col">

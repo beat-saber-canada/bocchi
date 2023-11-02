@@ -18,7 +18,7 @@ export default class Relay {
 
   constructor() {
     this.ta = new Client("Magnesium Overlay", {
-      url: "ws://ta.magnesium.gg:32001",
+      url: "ws://205.209.120.243:2053",
       options: {
         autoReconnect: true,
         autoReconnectInterval: 1000,
@@ -33,7 +33,7 @@ export default class Relay {
     });
 
     this.setSocketListeners();
-    this.setTAListeners();
+    // this.setTAListeners();
 
     console.log("Successfully injected the Relay server.");
   }
@@ -41,6 +41,7 @@ export default class Relay {
   setSocketListeners() {
     this.io.on("connection", (socket) => {
       socket.on("updateState", () => {
+        console.log(JSON.stringify(this.rstate.getState()));
         socket.emit("state", this.rstate.getState());
       });
 
@@ -71,41 +72,41 @@ export default class Relay {
     });
   }
 
-  setTAListeners() {
-    this.ta.on("taConnected", () => {
-      this.rstate.initMatches(this.ta);
-      this.io.emit("state", this.rstate.getState());
-    });
+  // setTAListeners() {
+  //   this.ta.on("taConnected", () => {
+  //     this.rstate.initMatches(this.ta);
+  //     this.io.emit("state", this.rstate.getState());
+  //   });
 
-    this.ta.on("matchCreated", (event: TAEvents.PacketEvent<Models.Match>) => {
-      this.rstate.addMatch(event.data, this.ta);
-      this.io.emit("state", this.rstate.getState());
-    });
+  //   this.ta.on("matchCreated", (event: TAEvents.PacketEvent<Models.Match>) => {
+  //     this.rstate.addMatch(event.data, this.ta);
+  //     this.io.emit("state", this.rstate.getState());
+  //   });
 
-    this.ta.on("matchUpdated", (event: TAEvents.PacketEvent<Models.Match>) => {
-      this.rstate.updateMatch(event.data, this.ta);
-      this.io.emit("state", this.rstate.getState());
-    });
+  //   this.ta.on("matchUpdated", (event: TAEvents.PacketEvent<Models.Match>) => {
+  //     this.rstate.updateMatch(event.data, this.ta);
+  //     this.io.emit("state", this.rstate.getState());
+  //   });
 
-    this.ta.on("userUpdated", (event: TAEvents.PacketEvent<Models.User>) => {
-      this.rstate.updateUser(event.data);
-      this.io.emit("state", this.rstate.getState());
-    });
+  //   this.ta.on("userUpdated", (event: TAEvents.PacketEvent<Models.User>) => {
+  //     this.rstate.updateUser(event.data);
+  //     this.io.emit("state", this.rstate.getState());
+  //   });
 
-    this.ta.on("matchDeleted", (event: TAEvents.PacketEvent<Models.Match>) => {
-      this.rstate.deleteMatch(event.data.guid);
-      this.io.emit("state", this.rstate.getState());
-    });
+  //   this.ta.on("matchDeleted", (event: TAEvents.PacketEvent<Models.Match>) => {
+  //     this.rstate.deleteMatch(event.data.guid);
+  //     this.io.emit("state", this.rstate.getState());
+  //   });
 
-    this.ta.on("realtimeScore", (recv: TAEvents.PacketEvent<Packets.Push.RealtimeScore>) => {
-      let delay = this.ta.getUser(recv.data.user_guid)?.stream_delay_ms;
-      if (delay == undefined) delay = 0;
+  //   this.ta.on("realtimeScore", (recv: TAEvents.PacketEvent<Models.RealtimeScore>) => {
+  //     let delay = this.ta.getUser(recv.data.user_guid)?.stream_delay_ms;
+  //     if (delay == undefined) delay = 0;
 
-      this.rstate.updateRTScore(recv, (data: RTState) => {
-        setTimeout(() => {
-          this.io.emit("realtimeScore", data);
-        }, delay);
-      });
-    });
-  }
+  //     this.rstate.updateRTScore(recv, (data: RTState) => {
+  //       setTimeout(() => {
+  //         this.io.emit("realtimeScore", data);
+  //       }, delay);
+  //     });
+  //   });
+  // }
 }

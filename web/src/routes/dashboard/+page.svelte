@@ -1,13 +1,12 @@
 <script lang="ts">
   import { loadFull } from "tsparticles";
-  import type { Engine } from "tsparticles-engine";
   import Particles from "svelte-particles";
   import { Models } from "tournament-assistant-client";
   import { io } from "$lib/socket";
 
   let matches: any[] = []
 
-  async function particlesInit(engine: Engine) {
+  async function particlesInit(engine: any) {
     await loadFull(engine);
   }
 

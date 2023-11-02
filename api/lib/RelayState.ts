@@ -220,7 +220,7 @@ export class RelayState {
   }
 
   updateRTScore(
-    realtimeScore: TAEvents.PacketEvent<Packets.Push.RealtimeScore>,
+    realtimeScore: TAEvents.PacketEvent<Models.RealtimeScore>,
     callback: CallableFunction
   ) {
     this.scoresLock.acquire('scores', () => {
@@ -234,11 +234,11 @@ export class RelayState {
       updatedPlayer.score = {
         score: realtimeScore.data.score_with_modifiers,
         accuracy: realtimeScore.data.accuracy,
-        misscount: realtimeScore.data.scoreTracker.notesMissed,
-        badcutcount: realtimeScore.data.scoreTracker.badCuts,
+        misscount: realtimeScore.data.notesMissed,
+        badcutcount: realtimeScore.data.badCuts,
         totalmisscount:
-          realtimeScore.data.scoreTracker.notesMissed +
-          realtimeScore.data.scoreTracker.badCuts,
+          realtimeScore.data.notesMissed +
+          realtimeScore.data.badCuts,
       };
       this.playerScores.set(updatedPlayer.guid, <TeamScore>{ teamGUID: teamGUID, score: updatedPlayer.score })
       let teamLen = Array.from(this.playerScores.values()).filter((e) => e.teamGUID == teamGUID).length;
